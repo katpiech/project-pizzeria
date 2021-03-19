@@ -64,9 +64,9 @@
     }
     renderInMenu() {
       const thisProduct = this;
-      
+
       /* generate HTML based on template */
-      generatedHTML = templates.menuProduct(thisProduct.data);
+      const generatedHTML = templates.menuProduct(thisProduct.data);
 
       /* create element using utils.createElementFromHTML */
       thisProduct.element = utils.createDOMFromHTML(generatedHTML);
