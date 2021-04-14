@@ -59,6 +59,7 @@
       thisProduct.data = data;
 
       thisProduct.renderInMenu();
+      thisProduct.getElements();
       thisProduct.initAccordion();
 
 
@@ -78,32 +79,50 @@
       menuContainer.appendChild(thisProduct.element);
 
     }
+    getElements() {
+      const thisProduct = this;
+
+      thisProduct.accordionTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
+      thisProduct.form = thisProduct.element.querySelector(select.menuProduct.form);
+      thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs);
+      thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
+      thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
+    }
+
     initAccordion() {
       const thisProduct = this;
       /* find the clickable trigger (the element that should react to clicking) */
 
-      const clickableTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
-      console.log('clickable Triggle is:', clickableTrigger);
+      /* const clickableTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
+      console.log('clickable Triggle is:', clickableTrigger); */
       /* START: add event listener to clickable trigger on event click */
-      clickableTrigger.addEventListener('click', function (event) {
+      thisProduct.accordionTrigger.addEventListener('click', function (event) {
         console.log('clicked');
         /* prevent default action for event */
         event.preventDefault();
         /* find active product (product that has active class) */
         const activeProducts = document.querySelectorAll('.product.active');
-        console.log('activeProducts is:' , activeProducts);
+        console.log('activeProducts is:', activeProducts);
 
         /* if there is active product and it's not thisProduct.element, remove class active from it */
         if ((activeProducts != null) && (thisProduct.element != activeProducts)) {
           for (let activeProduct of activeProducts) {
             activeProduct.classList.remove(classNames.menuProduct.wrapperActive);
-            console.log('activeProduct is:' , activeProduct);
+            console.log('activeProduct is:', activeProduct);
           }
-        } 
+        }
         /* toggle active class on thisProduct.element */
         thisProduct.element.classList.toggle(classNames.menuProduct.wrapperActive);
       });
 
+    }
+    initOrderForm() {
+      const thisProduct = this;
+      console.log ('initOrderForm');
+    }
+    processOrder() {
+      const thisProduct = this;
+      console.log ('processOrder');
     }
   }
 
