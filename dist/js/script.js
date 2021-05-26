@@ -142,6 +142,11 @@
     initAmountWidget() {
       const thisProduct = this;
       thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem);
+      thisProduct.amountWidgetElem.addEventListener('updated', function () {
+        thisProduct.processOrder();
+      });
+
+      //thisProduct.processOrder();
     }
     processOrder() {
       const thisProduct = this;
@@ -191,6 +196,8 @@
 
         }
       }
+      /* multiply price by amount */
+      price *=thisProduct.amountWidget.value;
       // update calculated price in the HTML
       thisProduct.priceElem.innerHTML = price;
     }
@@ -200,7 +207,7 @@
     constructor(element) {
       const thisWidget = this;
       thisWidget.getElements(element);
-      thisWidget.setValue(thisWidget.input.value);
+      thisWidget.setValue(settings.amountWidget.defaultValue);
       thisWidget.initActions();
       console.log('AmountWidget:', thisWidget);
       console.log('constructor arguments:', element);
@@ -217,23 +224,37 @@
       const thisWidget = this;
       const newValue = parseInt(value);
 
-      /*TODO: Add validation */
-      if (thisWidget.value !== newValue && !isNaN(newValue)) {
+      if (thisWidget.value !== newValue && !isNaN(newValue) && newValue <= settings.amountWidget.defaultMax && newValue >= settings.amountWidget.defaultMin) {
         thisWidget.value = newValue;
       }
-
-      thisWidget.value = newValue;
       thisWidget.input.value = thisWidget.value;
+      this.announce();
 
     }
-    initActions(){
+    announce() {
+      const thisWidget = this;
+      const event = new Event('updated');
+      thisWidget.element.dispatchEvent(event);
+    }
+
+    initActions() {
       const thisWidget = this;
       console.log('initActions');
-     // for (let input of thisWidget.formInputs) {
-        thisWidget.input.addEventListener('change', function (value) {
-          thisWidget.setValue(value);
-        });
-     // } 
+      thisWidget.input.addEventListener('change', function () {
+        thisWidget.setValue(thisWidget.input.value);
+        console.log('Value', thisWidget.input.value);
+      });
+      thisWidget.linkDecrease.addEventListener('click', function (event) {
+        event.preventDefault();
+        thisWidget.setValue(thisWidget.input.value - 1);
+        console.log('value', thisWidget.input.value);
+      });
+
+      thisWidget.linkIncrease.addEventListener('click', function (event) {
+        event.preventDefault();
+        thisWidget.setValue(parseInt(thisWidget.input.value) + 1);
+        console.log('value', thisWidget.input.value);
+      });
     }
   }
 
