@@ -53,7 +53,7 @@
     },
     // CODE ADDED END
   };
-  
+
   const classNames = {
     menuProduct: {
       wrapperActive: 'active',
@@ -65,7 +65,7 @@
     },
     // CODE ADDED END
   };
-  
+
   const settings = {
     amountWidget: {
       defaultValue: 1,
@@ -78,7 +78,7 @@
     },
     // CODE ADDED END
   };
-  
+
   const templates = {
     menuProduct: Handlebars.compile(document.querySelector(select.templateOf.menuProduct).innerHTML),
     // CODE ADDED START
@@ -229,7 +229,7 @@
         }
       }
       /* multiply price by amount */
-      price *=thisProduct.amountWidget.value;
+      price *= thisProduct.amountWidget.value;
       // update calculated price in the HTML
       thisProduct.priceElem.innerHTML = price;
     }
@@ -290,6 +290,36 @@
     }
   }
 
+  class Cart {
+    constructor(element) {
+      const thisCart = this;
+      thisCart.products = [];
+      thisCart.getElements(element);
+      thisCart.initActions();
+      console.log('new Cart', thisCart);
+    }
+
+    getElements(element) {
+      const thisCart = this;
+      thisCart.dom = {};
+      thisCart.dom.wrapper = element;
+      thisCart.dom.toggleTrigger = element.querySelector(select.cart.toggleTrigger);
+      console.log(' thisCart.dom.toggleTrigger is:',  thisCart.dom.toggleTrigger);
+    }
+
+    initActions(){
+      const thisCart = this;
+      thisCart.dom.toggleTrigger.addEventListener('click', function() {
+        console.log('clicked');
+        classNames.cart.wrapperActive.toggle(thisCart.dom.wrapper);
+        console.log('classNames.cart.wrapperActive is:', classNames.cart.wrapperActive);
+        console.log('thisCart.dom.wrapper is:', thisCart.dom.wrapper);
+      });
+
+
+    }
+  }
+
   const app = {
     initMenu: function () {
       const thisApp = this;
@@ -316,6 +346,13 @@
 
       thisApp.initData();
       thisApp.initMenu();
+      thisApp.initCart();
+    },
+
+    initCart: function(){
+      const thisApp = this;
+      const cartElem = document.querySelector(select.containerOf.cart);
+      thisApp.cart = new Cart(cartElem);
     },
   };
 
